@@ -13,7 +13,7 @@
 
 (s/def wire-command :- wire.in.command/Command
   {:index      0
-   :type       :feed-paper
+   :type       "feed-paper"
    :scan-lines 42})
 
 (s/def wire-document :- wire.in.document/Document

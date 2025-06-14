@@ -6,7 +6,7 @@
 
 (def feed-paper
   (merge base
-         {:type       (s/eq :feed-paper)
+         {:type       (s/eq "feed-paper")
           :scan-lines s/Int}))
 (s/defschema FeedPaper feed-paper)
 
@@ -15,5 +15,5 @@
 
 (s/defschema Command
   (s/conditional
-   (command-type [:feed-paper])
+   (command-type ["feed-paper"])
    FeedPaper))

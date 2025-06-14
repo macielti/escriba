@@ -16,7 +16,9 @@
                                       :env  :prod}
    ::component.postgresql/postgresql {:components {:config (ig/ref ::component.config/config)}}
    ::component.routes/routes         {:routes diplomat.http-server/routes}
-   ::component.service/service       {:components {:routes (ig/ref ::component.routes/routes)}}})
+   ::component.service/service       {:components {:config     (ig/ref ::component.config/config)
+                                                   :postgresql (ig/ref ::component.postgresql/postgresql)
+                                                   :routes     (ig/ref ::component.routes/routes)}}})
 
 (defn start-system! []
   (timbre/set-level! :info)

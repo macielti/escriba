@@ -23,6 +23,6 @@
   [{:keys [id document_id index scan_lines]} :- wire.postgresql.command/Command]
   {:id          id
    :document-id document_id
-   :index       index
-   :scan-lines  scan_lines
+   :index       (int index)
+   :scan-lines  (int scan_lines)
    :type        :feed-paper})

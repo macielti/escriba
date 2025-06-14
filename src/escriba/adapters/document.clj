@@ -11,7 +11,7 @@
 (s/defn wire->internal :- models.document/Document
   [{:keys [commands]} :- wire.in.document/Document]
   (let [document-id (random-uuid)
-        commands' (map #(adapters.command/wire->internal % document-id) commands)]
+        commands' (mapv #(adapters.command/wire->internal % document-id) commands)]
     {:id         document-id
      :status     :requested
      :created-at (Date.)
