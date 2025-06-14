@@ -11,7 +11,9 @@
 
                  [net.clojars.macielti/common-clj "43.74.74"]
                  [net.clojars.macielti/postgresql-component "2.2.5"]
-                 [net.clojars.macielti/service-component "2.4.2"]]
+                 [net.clojars.macielti/service-component "2.4.2"]
+
+                 [com.github.clj-easy/graal-build-time "1.0.5"]]
 
   :profiles {:dev {:plugins        [[lein-shell "0.5.0"]
                                     [com.github.liquidz/antq "RELEASE"]
