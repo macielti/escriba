@@ -37,6 +37,28 @@
                                     "clean-ns-fix" ["clojure-lsp" "clean-ns"] ;; Fix namespaces not clean
                                     "format-fix"   ["clojure-lsp" "format"] ;; Fix namespaces not formatted
                                     "lint-fix"     ["do" ["clean-ns-fix"] ["format-fix"]] ;; Fix both
-                                    }}}
+
+                                    "native"       ["shell"
+                                                    "native-image"
+                                                    "--no-fallback"
+                                                    "--enable-url-protocols=http,https"
+                                                    "-march=compatibility"
+                                                    "--report-unsupported-elements-at-runtime"
+
+                                                    "--initialize-at-build-time"
+
+                                                    ; postgresql
+                                                    "--initialize-at-build-time=org.slf4j.helpers.NOPLoggerFactory"
+                                                    "--initialize-at-build-time=org.pg.enums.TxLevel"
+                                                    "--initialize-at-build-time=org.pg.enums.CopyFormat"
+                                                    "--initialize-at-build-time=org.pg.enums.TXStatus"
+
+                                                    "-H:ReflectionConfigurationFiles=reflect-config.json"
+                                                    "--features=clj_easy.graal_build_time.InitClojureClasses"
+                                                    "-Dio.pedestal.log.defaultMetricsRecorder=nil"
+                                                    "-jar" "./target/${:uberjar-name:-${:name}-${:version}-standalone.jar}"
+                                                    "-H:+UnlockExperimentalVMOptions"
+                                                    "-H:+StaticExecutableWithDynamicLibC"
+                                                    "-H:Name=./target/${:name}"]}}}
 
   :main escriba.components)
