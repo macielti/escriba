@@ -7,11 +7,20 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url  "https://www.eclipse.org/legal/epl-2.0/"}
 
+  :exclusions [amazonica]
+
   :dependencies [[org.clojure/clojure "1.12.1"]
 
                  [net.clojars.macielti/common-clj "43.74.74"]
                  [net.clojars.macielti/postgresql-component "2.2.5"]
                  [net.clojars.macielti/service-component "2.4.2"]
+
+                 ;pedestal
+                 [io.pedestal/pedestal.service "0.7.2"]
+                 [io.pedestal/pedestal.jetty "0.7.2"]
+                 [io.pedestal/pedestal.error "0.7.2"]
+
+                 [com.taoensso/timbre "6.6.1"]
 
                  [com.github.clj-easy/graal-build-time "1.0.5"]]
 
