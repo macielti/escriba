@@ -39,4 +39,4 @@
                                     "lint-fix"     ["do" ["clean-ns-fix"] ["format-fix"]] ;; Fix both
                                     }}}
 
-  :main beagle-graalvm.components)
+  :main escriba.components)
