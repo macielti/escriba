@@ -64,6 +64,9 @@
                                                     "--initialize-at-build-time=org.pg.enums.CopyFormat"
                                                     "--initialize-at-build-time=org.pg.enums.TXStatus"
 
+                                                    ;;prometheus
+                                                    "--initialize-at-run-time=io.prometheus.client.Striped64"
+
                                                     "-H:ReflectionConfigurationFiles=reflect-config.json"
                                                     "--features=clj_easy.graal_build_time.InitClojureClasses"
                                                     "-Dio.pedestal.log.defaultMetricsRecorder=nil"
