@@ -13,3 +13,12 @@
                  :scan-lines  42
                  :type        :feed-paper}
                 (adapters.command/wire->internal fixtures/wire-command fixtures/document-id)))))
+
+(s/deftest postgresql->internal-test
+  (testing "Given a postgresql command, it returns an internal command"
+    (is (match? {:id          uuid?
+                 :document-id uuid?
+                 :index       int?
+                 :scan-lines  int?
+                 :type        :feed-paper}
+                (adapters.command/postgresql->internal fixtures/database-command)))))
