@@ -11,18 +11,13 @@
 (logging/use-timbre)
 
 (def arrangement
-  {::component.config/config           {:path "resources/config.edn"
-                                        :env  :prod}
-   ::component.postgresql/postgresql   {:components {:config (ig/ref ::component.config/config)}}
-   ::component.prometheus/prometheus   {:metrics []}
-   ::component.http-client/http-client {:components {:config     (ig/ref ::component.config/config)
-                                                     :prometheus (ig/ref ::component.prometheus/prometheus)}}
-   ::component.new-relic/new-relic     {:components {:config      (ig/ref ::component.config/config)
-                                                     :http-client (ig/ref ::component.http-client/http-client)}}
+  {::component.config/config         {:path "resources/config.edn"
+                                      :env  :prod}
+   ::component.postgresql/postgresql {:components {:config (ig/ref ::component.config/config)}}
    #_::component.routes/routes           #_{:routes diplomat.http-server/routes}
    #_::component.scheduler/scheduler     #_{:jobs       diplomat.job/jobs
                                             :components components}
-   ::component.service/service         {:components {:routes (ig/ref ::component.routes/routes)}}})
+   #_::component.service/service       #_{:components {:routes (ig/ref ::component.routes/routes)}}})
 
 (defn start-system! []
   (timbre/set-level! :info)
