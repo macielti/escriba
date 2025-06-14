@@ -4,7 +4,7 @@
 (def base
   {:id         s/Uuid
    :index      s/Int
-   :command-id s/Uuid})
+   :document-id s/Uuid})
 
 (def feed-paper
   (merge base
