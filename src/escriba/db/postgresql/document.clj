@@ -21,3 +21,13 @@
                           adapters.document/postgresql->internal)
             commands (mapv #(database.command/insert-using-connection! % database-conn') commands)]
         (logic.document/document-with-commands document commands)))))
+
+(s/defn find-oldest-requested-document :- (s/maybe models.document/Document)
+  [postgresql-pool]
+  (pg/with-connection [database-conn postgresql-pool]
+    (some->> (pg/execute database-conn
+                         "SELECT * FROM documents WHERE status = $1 ORDER BY created_at ASC LIMIT 1"
+                         {:params ["requested"]
+                          :first  true})
+             (medley/remove-vals nil?)
+             adapters.document/postgresql->internal)))

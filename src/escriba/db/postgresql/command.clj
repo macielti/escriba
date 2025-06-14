@@ -15,3 +15,13 @@
                     :first  true})
        (medley/remove-vals nil?)
        adapters.command/postgresql->internal))
+
+(s/defn find-by-document-id :- [models.command/Command]
+  [document-id :- s/Uuid
+   postgresql-pool]
+  (pg/with-connection [database-conn postgresql-pool]
+    (->> (pg/execute database-conn
+                     "SELECT * FROM commands WHERE document_id = $1 ORDER BY index ASC"
+                     {:params [document-id]})
+         (map #(-> (medley/remove-vals nil? %)
+                   adapters.command/postgresql->internal)))))
