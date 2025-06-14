@@ -1,9 +1,7 @@
 (ns escriba.components
   (:require [common-clj.integrant-components.config :as component.config]
-            [common-clj.integrant-components.routes :as component.routes]
             [integrant.core :as ig]
             [postgresql-component.core :as component.postgresql]
-            [service-component.core :as component.service]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.tools.logging :as logging])
   (:gen-class))
