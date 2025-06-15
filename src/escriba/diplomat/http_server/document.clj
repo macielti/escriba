@@ -10,3 +10,8 @@
       (controllers.document/create! postgresql))
   {:status 202
    :body   {}})
+
+(s/defn retrieve-document-to-be-printed!
+  [{{:keys [postgresql]} :components}]
+  {:status 200
+   :body   {:document (controllers.document/retrieve-document-to-be-printed postgresql)}})
