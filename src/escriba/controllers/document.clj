@@ -1,8 +1,8 @@
 (ns escriba.controllers.document
-  (:require [escriba.db.postgresql.document :as database.document]
-            [escriba.db.postgresql.command :as database.command]
-            [escriba.models.document :as models.document]
+  (:require [escriba.db.postgresql.command :as database.command]
+            [escriba.db.postgresql.document :as database.document]
             [escriba.logic.document :as logic.document]
+            [escriba.models.document :as models.document]
             [schema.core :as s]))
 
 (s/defn create! :- models.document/Document
