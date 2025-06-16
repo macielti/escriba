@@ -12,7 +12,8 @@
 (logging/use-timbre)
 
 (def schemas ["CREATE TABLE IF NOT EXISTS documents (id UUID PRIMARY KEY, status VARCHAR(32) NOT NULL, created_at TIMESTAMP NOT NULL, retrieved_at TIMESTAMP, completed_at TIMESTAMP, failed_at TIMESTAMP);"
-              "CREATE TABLE IF NOT EXISTS commands (id UUID PRIMARY KEY, index INTEGER NOT NULL, document_id UUID NOT NULL, type VARCHAR(50) NOT NULL, scan_lines INTEGER);"])
+              "CREATE TABLE IF NOT EXISTS commands (id UUID PRIMARY KEY, index INTEGER NOT NULL, document_id UUID NOT NULL, type VARCHAR(50) NOT NULL, scan_lines INTEGER);"
+              "ALTER TABLE commands ADD COLUMN content VARCHAR;"])
 
 (def arrangement
   {::component.config/config                   {:path "resources/config.test.edn"
@@ -25,7 +26,7 @@
                                                              :routes     (ig/ref ::component.routes/routes)}}})
 
 (defn start-system! []
-  (timbre/set-level! :info)
+  (timbre/set-min-level! :info)
   (ig/init arrangement))
 
 (def -main start-system!)

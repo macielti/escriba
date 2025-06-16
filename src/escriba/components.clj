@@ -21,7 +21,7 @@
                                                    :routes     (ig/ref ::component.routes/routes)}}})
 
 (defn start-system! []
-  (timbre/set-level! :info)
+  (timbre/set-min-level! :info)
   (ig/init arrangement))
 
 (def -main start-system!)

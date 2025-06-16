@@ -16,6 +16,14 @@
                    :commands vector?}
                   (database.document/insert! fixtures/internal-document pool))))))
 
+(s/deftest insert-print-text-command-test
+  (testing "Should insert a Document inside Database, with the PrintText command"
+    (let [pool (component.postgresql-mock/postgresql-pool-mock aux.components/schemas)]
+      (is (match? {:id       uuid?
+                   :commands [{:type    :print-text
+                               :content fixtures/text-content}]}
+                  (database.document/insert! (assoc fixtures/internal-document :commands [fixtures/internal-print-text-command]) pool))))))
+
 (s/deftest find-oldest-requested-document-test
   (testing "Should find the oldest requested document"
     (let [pool (component.postgresql-mock/postgresql-pool-mock aux.components/schemas)

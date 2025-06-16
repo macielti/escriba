@@ -16,6 +16,15 @@
    :scan-lines  scan-lines
    :type        :feed-paper})
 
+(s/defmethod wire->internal :print-text :- models.command/PrintText
+  [{:keys [index content]} :- wire.in.command/PrintText
+   document-id :- s/Uuid]
+  {:id          (random-uuid)
+   :document-id document-id
+   :index       index
+   :content     content
+   :type        :print-text})
+
 (defmulti postgresql->internal
   (fn [command] (:type command)))
 
@@ -26,3 +35,11 @@
    :index       (int index)
    :scan-lines  (int scan_lines)
    :type        :feed-paper})
+
+(s/defmethod postgresql->internal "print-text" :- models.command/PrintText
+  [{:keys [id document_id index content]} :- wire.postgresql.command/Command]
+  {:id          id
+   :document-id document_id
+   :index       (int index)
+   :content     content
+   :type        :print-text})

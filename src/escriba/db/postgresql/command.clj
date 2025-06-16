@@ -6,12 +6,12 @@
             [schema.core :as s]))
 
 (s/defn insert-using-connection! :- models.command/Command
-  [{:keys [id index document-id type scan-lines]} :- models.command/Command
+  [{:keys [id index document-id type scan-lines content]} :- models.command/Command
    postgresql-connection]
   (->> (pg/execute postgresql-connection
-                   "INSERT INTO commands (id, index, document_id, type, scan_lines) VALUES ($1, $2, $3, $4, $5)
+                   "INSERT INTO commands (id, index, document_id, type, scan_lines, content) VALUES ($1, $2, $3, $4, $5, $6)
                    RETURNING *"
-                   {:params [id index document-id (name type) scan-lines]
+                   {:params [id index document-id (name type) scan-lines content]
                     :first  true})
        (medley/remove-vals nil?)
        adapters.command/postgresql->internal))
