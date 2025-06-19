@@ -31,3 +31,23 @@
                           :first  true})
              (medley/remove-vals nil?)
              adapters.document/postgresql->internal)))
+
+(s/defn update-status! :- models.document/Document
+  [status :- models.document/Status
+   current-status :- models.document/Status
+   document-id :- s/Uuid
+   postgresql-pool]
+  (pg/with-connection [database-conn postgresql-pool]
+    (->> (pg/execute database-conn
+                     "UPDATE documents SET status = $2 WHERE id = $1 AND status = $3
+                     RETURNING *"
+                     {:params [document-id (name status) (name current-status)]
+                      :first  true})
+         (medley/remove-vals nil?)
+         adapters.document/postgresql->internal)))
+
+(def pending! (partial update-status! :pending :requested))
+
+(def failed! (partial update-status! :failed :pending))
+
+(def failed! (partial update-status! :completed :pending))
