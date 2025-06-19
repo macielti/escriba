@@ -27,7 +27,6 @@
 (s/deftest find-oldest-requested-document-test
   (testing "Should find the oldest requested document"
     (let [pool (component.postgresql-mock/postgresql-pool-mock aux.components/schemas)
-          _document (database.document/insert! fixtures/internal-document pool)
           requested-document (helpers.schema/generate models.document/Document {:status :requested})]
       (is (nil? (database.document/find-oldest-requested-document pool)))
 

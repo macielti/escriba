@@ -5,7 +5,7 @@
             [schema.core :as s]))
 
 (defmulti wire->internal
-  (fn [command _document-id] (-> (:type command) keyword)))
+  (fn [command _document-id] (:type command)))
 
 (s/defmethod wire->internal :feed-paper :- models.command/FeedPaper
   [{:keys [index scan-lines]} :- wire.in.command/FeedPaper

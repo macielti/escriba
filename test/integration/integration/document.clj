@@ -26,7 +26,7 @@
       (is (= {:status 202}
              (aux.http/create-document! fixtures/wire-document service-fn))))
 
-    (testing "Should be able to retrieve the document to be printed"
+    (testing "Should be able to trieve the document to be printed"
       (is (match? {:status 200
                    :body   {:document {:commands [{:id   string?
                                                    :type string?}]

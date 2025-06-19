@@ -6,23 +6,23 @@
 
 (def feed-paper
   (merge base
-         {:type       (s/eq "feed-paper")
+         {:type       (s/eq :feed-paper)
           :scan-lines s/Int}))
 (s/defschema FeedPaper feed-paper)
 
 (def print-text
   (merge base
-         {:type    (s/eq "print-text")
+         {:type    (s/eq :print-text)
           :content s/Str}))
 (s/defschema PrintText print-text)
 
-(defn- command-type [command-types]
-  #(contains? (set command-types) (:type %)))
+(defn- command-type [command-type]
+  #(= (keyword (:type %)) command-type))
 
-(s/defschema Command
+(def Command
   (s/conditional
-   (command-type ["feed-paper"])
+   (command-type :feed-paper)
    FeedPaper
 
-   (command-type ["print-text"])
+   (command-type :print-text)
    PrintText))

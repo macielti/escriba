@@ -14,13 +14,13 @@
 (def text-content "Lorem ipsum dolor sit amet.")
 
 (s/def wire-command :- wire.in.command/Command
-  {:index      0
-   :type       "feed-paper"
-   :scan-lines 42})
+  (helpers.schema/generate wire.in.command/FeedPaper {:index      0
+                                                      :type       :feed-paper
+                                                      :scan-lines 42}))
 
 (s/def wire-print-text-command :- wire.in.command/PrintText
   (helpers.schema/generate wire.in.command/PrintText {:content text-content
-                                                      :index 0}))
+                                                      :index   0}))
 
 (s/def wire-document :- wire.in.document/Document
   {:commands [wire-command]})
