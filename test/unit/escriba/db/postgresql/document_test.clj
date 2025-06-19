@@ -35,3 +35,23 @@
       (is (match? {:id     uuid?
                    :status :requested}
                   (database.document/find-oldest-requested-document pool))))))
+
+(s/deftest update-status-test
+  (testing "Should find the oldest requested document"
+    (let [pool (component.postgresql-mock/postgresql-pool-mock aux.components/schemas)
+          requested-document (helpers.schema/generate models.document/Document {:status :requested})
+          document (database.document/insert! requested-document pool)]
+
+      (is (match? {:id     (:id document)
+                   :status :requested}
+                  document))
+
+      (is (match? {:id     (:id document)
+                   :status :pending}
+                  (database.document/pending! (:id document) pool)))
+
+      (is (match? {:id     (:id document)
+                   :status :completed}
+                  (database.document/completed! (:id document) pool)))
+
+      (is (nil? (database.document/failed! (:id document) pool))))))
