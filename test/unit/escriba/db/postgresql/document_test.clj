@@ -46,12 +46,14 @@
                    :status :requested}
                   document))
 
-      (is (match? {:id     (:id document)
-                   :status :pending}
+      (is (match? {:id           (:id document)
+                   :status       :pending
+                   :retrieved-at inst?}
                   (database.document/pending! (:id document) pool)))
 
-      (is (match? {:id     (:id document)
-                   :status :completed}
+      (is (match? {:id           (:id document)
+                   :status       :completed
+                   :completed-at inst?}
                   (database.document/completed! (:id document) pool)))
 
       (is (nil? (database.document/failed! (:id document) pool))))))

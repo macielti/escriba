@@ -26,6 +26,6 @@
                       :status     (keyword status)
                       :created-at (local-datetime->utc-instant created_at)
                       :commands   []}
-                     :retrieved-at retrieved_at
-                     :completed-at completed_at
-                     :failed-at failed_at))
+                     :retrieved-at (some-> retrieved_at local-datetime->utc-instant)
+                     :completed-at (some-> completed_at local-datetime->utc-instant)
+                     :failed-at (some-> failed_at local-datetime->utc-instant)))

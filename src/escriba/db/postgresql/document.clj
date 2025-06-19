@@ -5,7 +5,8 @@
             [escriba.models.document :as models.document]
             [medley.core :as medley]
             [pg.core :as pg]
-            [schema.core :as s]))
+            [schema.core :as s])
+  (:import (java.util Date)))
 
 (s/defn insert! :- models.document/Document
   [{:keys [id status created-at commands]} :- models.document/Document
@@ -32,22 +33,38 @@
              (medley/remove-vals nil?)
              adapters.document/postgresql->internal)))
 
-(s/defn update-status! :- (s/maybe models.document/Document)
-  [status :- models.document/Status
-   current-status :- models.document/Status
-   document-id :- s/Uuid
+(s/defn pending! :- (s/maybe models.document/Document)
+  [document-id :- s/Uuid
    postgresql-pool]
   (pg/with-connection [database-conn postgresql-pool]
     (some->> (pg/execute database-conn
-                         "UPDATE documents SET status = $2 WHERE id = $1 AND status = $3
+                         "UPDATE documents SET status = $2, retrieved_at = $4 WHERE id = $1 AND status = $3
                          RETURNING *"
-                         {:params [document-id (name status) (name current-status)]
+                         {:params [document-id (name :pending) (name :requested) (Date.)]
                           :first  true})
              (medley/remove-vals nil?)
              adapters.document/postgresql->internal)))
 
-(def pending! (partial update-status! :pending :requested))
+(s/defn failed! :- (s/maybe models.document/Document)
+  [document-id :- s/Uuid
+   postgresql-pool]
+  (pg/with-connection [database-conn postgresql-pool]
+    (some->> (pg/execute database-conn
+                         "UPDATE documents SET status = $2, failed_at = $4 WHERE id = $1 AND status = $3
+                         RETURNING *"
+                         {:params [document-id (name :failed) (name :pending) (Date.)]
+                          :first  true})
+             (medley/remove-vals nil?)
+             adapters.document/postgresql->internal)))
 
-(def failed! (partial update-status! :failed :pending))
-
-(def completed! (partial update-status! :completed :pending))
+(s/defn completed! :- (s/maybe models.document/Document)
+  [document-id :- s/Uuid
+   postgresql-pool]
+  (pg/with-connection [database-conn postgresql-pool]
+    (some->> (pg/execute database-conn
+                         "UPDATE documents SET status = $2, completed_at = $4 WHERE id = $1 AND status = $3
+                         RETURNING *"
+                         {:params [document-id (name :completed) (name :pending) (Date.)]
+                          :first  true})
+             (medley/remove-vals nil?)
+             adapters.document/postgresql->internal)))
