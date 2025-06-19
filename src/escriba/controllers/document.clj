@@ -12,6 +12,12 @@
 
 (s/defn retrieve-document-to-be-printed :- models.document/Document
   [postgresql :- s/Any]
-  (let [{document-id :id :as document} (database.document/find-oldest-requested-document postgresql)
+  (let [{document-id :id} (database.document/find-oldest-requested-document postgresql)
         commands (database.command/find-by-document-id document-id postgresql)]
-    (logic.document/document-with-commands document commands)))
+    (-> (database.document/pending! document-id postgresql)
+        (logic.document/document-with-commands commands))))
+
+(s/defn acknowledge-document! :- (s/maybe models.document/Document)
+  [document-id :- s/Uuid
+   postgresql :- s/Any]
+  (database.document/completed! document-id postgresql))

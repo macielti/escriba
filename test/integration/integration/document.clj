@@ -31,7 +31,29 @@
                    :body   {:document {:commands [{:id   string?
                                                    :type string?}]
                                        :id       string?
-                                       :status   "requested"}}}
+                                       :status   "pending"}}}
                   (aux.http/fetch-document! service-fn))))
+
+    (ig/halt! system)))
+
+(s/deftest document-acknowledge
+  (let [system (aux.components/start-system!)
+        service-fn (-> system ::component.service/service :io.pedestal.http/service-fn)
+        document-creation-response (aux.http/create-document! fixtures/wire-document service-fn)
+        fetch-document-response (aux.http/fetch-document! service-fn)]
+
+    (testing "Should create a document with a valid request"
+      (is (= {:status 202}
+             document-creation-response)))
+
+    (testing "Should fetch the document to be printed"
+      (is (match? {:status 200
+                   :body   {:document {:status "pending"}}}
+                  fetch-document-response)))
+
+    (testing "Should be able to acknowledge the document"
+      (is (match? {:status 200
+                   :body   {:document {:status "completed"}}}
+                  (aux.http/document-ack! (get-in fetch-document-response [:body :document :id]) service-fn))))
 
     (ig/halt! system)))

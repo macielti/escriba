@@ -10,4 +10,8 @@
 
              ["/api/documents"
               :get [diplomat.http-server.document/retrieve-document-to-be-printed!]
-              :route-name :retrieve-document-to-be-printed]])
+              :route-name :retrieve-document-to-be-printed]
+
+             ["/api/documents/:document-id/ack"
+              :put [diplomat.http-server.document/acknowledge!]
+              :route-name :document-ack]])

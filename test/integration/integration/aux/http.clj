@@ -18,3 +18,11 @@
                                                  :get "/api/documents")]
     {:status status
      :body   (json/decode body true)}))
+
+(defn document-ack!
+  [document-id
+   service-fn]
+  (let [{:keys [status body]} (test/response-for service-fn
+                                                 :put (str "/api/documents/" document-id "/ack"))]
+    {:status status
+     :body   (json/decode body true)}))
