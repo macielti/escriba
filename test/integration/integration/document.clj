@@ -57,3 +57,32 @@
                   (aux.http/document-ack! (get-in fetch-document-response [:body :document :id]) service-fn))))
 
     (ig/halt! system)))
+
+(s/deftest back-to-queue
+  (let [system (aux.components/start-system!)
+        service-fn (-> system ::component.service/service :io.pedestal.http/service-fn)
+        document-creation-response (aux.http/create-document! fixtures/wire-document service-fn)
+        fetch-document-response (aux.http/fetch-document! service-fn)]
+
+    (testing "Should create a document with a valid request"
+      (is (= {:status 202}
+             document-creation-response)))
+
+    (testing "Should fetch the document to be printed"
+      (is (match? {:status 200
+                   :body   {:document {:status "pending"}}}
+                  fetch-document-response)))
+
+    (testing "Second attempt to fetch document should return the nothing"
+      (is (match? {:status 200
+                   :body   {}}
+                  (aux.http/fetch-document! service-fn))))
+
+    (Thread/sleep 90000)
+
+    (testing "Should fetch the document to be printed, after it is sent back to the queue"
+      (is (match? {:status 200
+                   :body   {:document {:status "pending"}}}
+                  fetch-document-response)))
+
+    (ig/halt! system)))

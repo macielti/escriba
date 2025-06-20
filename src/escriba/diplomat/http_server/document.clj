@@ -15,7 +15,9 @@
 (s/defn retrieve-document-to-be-printed!
   [{{:keys [postgresql]} :components}]
   {:status 200
-   :body   {:document (controllers.document/retrieve-document-to-be-printed postgresql)}})
+   :body   (if-let [document (controllers.document/retrieve-document-to-be-printed postgresql)]
+             {:document document}
+             {})})
 
 (s/defn acknowledge!
   [{{:keys [document-id]} :path-params

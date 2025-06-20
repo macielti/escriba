@@ -6,8 +6,10 @@
             [escriba.models.document :as models.document]
             [fixtures]
             [integration.aux.components :as aux.components]
+            [matcher-combinators.matchers :as matchers]
             [matcher-combinators.test :refer [match?]]
-            [schema.test :as s]))
+            [schema.test :as s])
+  (:import (java.util Date)))
 
 (s/deftest insert-test
   (testing "Should insert a Document inside Database"
@@ -57,3 +59,36 @@
                   (database.document/completed! (:id document) pool)))
 
       (is (nil? (database.document/failed! (:id document) pool))))))
+
+(s/deftest pending-too-long-test
+  (testing "Should be able to find pending documents that are pending for too long"
+    (let [pool (component.postgresql-mock/postgresql-pool-mock aux.components/schemas)
+          requested-document (helpers.schema/generate models.document/Document {:status       :pending
+                                                                                :retrieved-at (Date.)})
+          {:keys [id]} (database.document/insert! requested-document pool)]
+
+      (is (= []
+             (database.document/pending-too-long pool)))
+
+      (Thread/sleep 90000)
+
+      (is (match? [{:id     id
+                    :status :pending}]
+                  (database.document/pending-too-long pool))))))
+
+(s/deftest back-to-queue-test
+  (testing "Should be able to move a pending document back to the queue"
+    (let [pool (component.postgresql-mock/postgresql-pool-mock aux.components/schemas)
+          requested-document (helpers.schema/generate models.document/Document {:status       :pending
+                                                                                :retrieved-at (Date.)})
+          {:keys [id] :as document} (database.document/insert! requested-document pool)]
+
+      (is (match? {:status       :pending
+                   :retrieved-at inst?}
+                  document))
+
+      (is (match? (matchers/equals {:id         id
+                                    :commands   []
+                                    :created-at inst?
+                                    :status     :requested})
+                  (database.document/back-to-queue! id pool))))))

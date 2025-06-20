@@ -14,6 +14,7 @@
                  [net.clojars.macielti/common-clj "43.74.74"]
                  [net.clojars.macielti/postgresql-component "2.2.5"]
                  [net.clojars.macielti/service-component "4.4.2"]
+                 [net.clojars.macielti/scheduler-component "0.2.2"]
 
                  ;pedestal
                  [io.pedestal/pedestal.service "0.7.2"]
