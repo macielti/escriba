@@ -36,7 +36,8 @@
   [database]
   (let [documents (some->> (d/q '[:find (pull ?document [*])
                                   :in $
-                                  :where [?document :document/id _]] (d/db database))
+                                  :where [?document :document/id _]
+                                         [?document :document/status :document.status/requested]] (d/db database))
                            (mapv #(-> % first (dissoc :db/id)))
                            (mapv adapters.document/datalevin->document))]
     (when documents

@@ -14,7 +14,6 @@
 
 (s/defn retrieve-document-to-be-printed!
   [{{:keys [datalevin]} :components}]
-
   {:status 200
    :body   (if-let [document (controllers.document/retrieve-document-to-be-printed datalevin)]
              {:documents [document]}
