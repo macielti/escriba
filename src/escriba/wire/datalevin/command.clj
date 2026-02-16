@@ -8,6 +8,7 @@
    :command/document-id {:db/valueType :db.type/uuid}
    :command/type        {:db/valueType :db.type/keyword}
    :command/orientation {:db/valueType :db.type/keyword}
+   :command/style       {:db/valueType :db.type/keyword}
    :command/text        {:db/valueType :db.type/string}
    :command/lines       {:db/valueType :db.type/long}
    :command/height      {:db/valueType :db.type/long}
@@ -23,6 +24,20 @@
                     :command.orientation/rt})
 (def Orientation (apply s/enum orientations))
 
+(def styles #{:command.style/b
+              :command.style/i
+              :command.style/u
+              :command.style/u2
+              :command.style/bi
+              :command.style/biu
+              :command.style/biu2
+              :command.style/bu
+              :command.style/bu2
+              :command.style/iu
+              :command.style/iu2
+              :command.style/normal})
+(def StyleOptions (apply s/enum styles))
+
 (def command-schema
   {:command/id                           s/Uuid
    :command/index                        s/Int
@@ -32,5 +47,6 @@
    (s/optional-key :command/text)        s/Str
    (s/optional-key :command/lines)       s/Int
    (s/optional-key :command/height)      s/Int
-   (s/optional-key :command/width)       s/Int})
+   (s/optional-key :command/width)       s/Int
+   (s/optional-key :command/style)       StyleOptions})
 (s/defschema Command command-schema)

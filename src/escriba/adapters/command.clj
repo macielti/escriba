@@ -53,8 +53,17 @@
    :width       width
    :height      height})
 
+(s/defmethod wire->internal :style :- models.command/Style
+  [{:keys [index style]} :- wire.in.command/Style
+   document-id :- s/Uuid]
+  {:id          (random-uuid)
+   :document-id document-id
+   :index       index
+   :type        :size
+   :style       style})
+
 (s/defn command->datalevin :- wire.datalevin.command/Command
-  [{:keys [id index text lines type orientation width height] :as _command} :- models.command/Command
+  [{:keys [id index text lines type orientation width height style] :as _command} :- models.command/Command
    document-id :- s/Uuid]
   (medley/assoc-some {:command/id          id
                       :command/index       index
@@ -63,11 +72,12 @@
                      :command/text text
                      :command/lines lines
                      :command/orientation (some->> orientation name (keyword "command.orientation"))
+                     :command/style (some->> style name (keyword "command.style"))
                      :command/width width
                      :command/height height))
 
 (s/defn datalevin->command :- models.command/Command
-  [{:command/keys [id index text lines document-id type orientation height width]} :- wire.datalevin.command/Command]
+  [{:command/keys [id index text lines document-id type orientation height width style]} :- wire.datalevin.command/Command]
   (medley/assoc-some {:id          id
                       :index       index
                       :type        (-> type name keyword)
@@ -75,5 +85,6 @@
                      :text text
                      :lines lines
                      :orientation (some-> orientation name keyword)
+                     :style (some-> style name keyword)
                      :height height
                      :width width))

@@ -35,6 +35,12 @@
           :height s/Int}))
 (s/defschema Size size)
 
+(def style
+  (merge base
+         {:type  (s/eq :style)
+          :style models.command/StyleOptions}))
+(s/defschema Style style)
+
 (defn- command-type [command-type]
   #(= (keyword (:type %)) command-type))
 
@@ -53,4 +59,7 @@
    Align
 
    (command-type :size)
-   Size))
+   Size
+
+   (command-type :style)
+   Style))

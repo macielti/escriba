@@ -39,6 +39,15 @@
           :height s/Int}))
 (s/defschema Size size)
 
+(def styles #{:b :i :u :u2 :bi :biu :biu2 :bu :bu2 :iu :iu2 :normal})
+(def StyleOptions (apply s/enum styles))
+
+(def style
+  (merge base
+         {:type  (s/eq :style)
+          :style StyleOptions}))
+(s/defschema Style style)
+
 (defn- command-type [command-types]
   #(contains? (set command-types) (:type %)))
 
@@ -52,4 +61,6 @@
 
    (command-type [:align]) Align
 
-   (command-type [:size]) Size))
+   (command-type [:size]) Size
+
+   (command-type [:style]) Style))
