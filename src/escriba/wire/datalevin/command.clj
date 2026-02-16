@@ -11,7 +11,8 @@
    :command/lines       {:db/valueType :db.type/long}})
 
 (def types #{:command.type/print-text
-             :command.type/feed-paper})
+             :command.type/feed-paper
+             :command.type/cut})
 (def Type (apply s/enum types))
 
 (def command-schema

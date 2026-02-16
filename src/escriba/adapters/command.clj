@@ -26,6 +26,14 @@
    :text        text
    :type        :print-text})
 
+(s/defmethod wire->internal :cut :- models.command/Cut
+  [{:keys [index]} :- wire.in.command/Cut
+   document-id :- s/Uuid]
+  {:id          (random-uuid)
+   :document-id document-id
+   :index       index
+   :type        :cut})
+
 (s/defn command->datalevin :- wire.datalevin.command/Command
   [{:keys [id index text lines type] :as _command} :- models.command/Command
    document-id :- s/Uuid]

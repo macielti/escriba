@@ -57,12 +57,6 @@
 
                                                     "--initialize-at-build-time"
 
-                                                    ; postgresql
-                                                    "--initialize-at-build-time=org.slf4j.helpers.NOPLoggerFactory"
-                                                    "--initialize-at-build-time=org.pg.enums.TxLevel"
-                                                    "--initialize-at-build-time=org.pg.enums.CopyFormat"
-                                                    "--initialize-at-build-time=org.pg.enums.TXStatus"
-
                                                     ;;prometheus
                                                     "--initialize-at-run-time=io.prometheus.client.Striped64"
 

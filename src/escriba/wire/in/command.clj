@@ -12,9 +12,14 @@
 
 (def print-text
   (merge base
-         {:type    (s/eq :print-text)
+         {:type (s/eq :print-text)
           :text s/Str}))
 (s/defschema PrintText print-text)
+
+(def cut
+  (merge base
+         {:type (s/eq :cut)}))
+(s/defschema Cut cut)
 
 (defn- command-type [command-type]
   #(= (keyword (:type %)) command-type))
@@ -25,4 +30,7 @@
    FeedPaper
 
    (command-type :print-text)
-   PrintText))
+   PrintText
+
+   (command-type :cut)
+   Cut))

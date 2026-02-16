@@ -18,10 +18,16 @@
           :text s/Str}))
 (s/defschema PrintText print-text)
 
+(def cut
+  (merge base
+         {:type (s/eq :cut)}))
+(s/defschema Cut cut)
+
 (defn- command-type [command-types]
   #(contains? (set command-types) (:type %)))
 
 (s/defschema Command
   (s/conditional
    (command-type [:feed-paper]) FeedPaper
-   (command-type [:print-text]) PrintText))
+   (command-type [:print-text]) PrintText
+   (command-type [:cut]) Cut))
