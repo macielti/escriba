@@ -1,13 +1,13 @@
 (ns escriba.components
   (:require [common-clj.integrant-components.config :as component.config]
             [common-clj.integrant-components.routes :as component.routes]
+            [datalevin.component :as component.database]
+            [escriba.db.datalevin.config :as database.config]
             [escriba.diplomat.http-server :as diplomat.http-server]
             [escriba.diplomat.job :as diplomat.job]
             [integrant.core :as ig]
-            [datalevin.component :as component.database]
             [scheduler-component.core :as component.scheduler]
             [service-component.core :as component.service]
-            [escriba.db.datalevin.config :as database.config]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.tools.logging :as logging])
   (:gen-class))
