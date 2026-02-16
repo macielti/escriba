@@ -6,14 +6,14 @@
 
 (def feed-paper
   (merge base
-         {:type       (s/eq :feed-paper)
-          :scan-lines s/Int}))
+         {:type  (s/eq :feed-paper)
+          :lines s/Int}))
 (s/defschema FeedPaper feed-paper)
 
 (def print-text
   (merge base
          {:type    (s/eq :print-text)
-          :content s/Str}))
+          :text s/Str}))
 (s/defschema PrintText print-text)
 
 (defn- command-type [command-type]

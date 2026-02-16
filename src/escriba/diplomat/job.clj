@@ -5,8 +5,8 @@
   (:import (java.time Duration Instant)))
 
 (s/defn back-to-queue!
-  [{{:keys [postgresql]} :components}]
-  (controllers.document/back-to-queue! postgresql))
+  [{{:keys [datalevin]} :components}]
+  (controllers.document/back-to-queue! datalevin))
 
 (defn every-one-minute []
   (chime/periodic-seq (Instant/now) (Duration/ofMinutes 1)))

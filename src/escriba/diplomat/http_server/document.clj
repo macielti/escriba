@@ -5,22 +5,23 @@
   (:import (java.util UUID)))
 
 (s/defn create!
-  [{{:keys [document]}   :json-params
-    {:keys [postgresql]} :components}]
+  [{{:keys [document]}  :json-params
+    {:keys [datalevin]} :components}]
   (-> (adapters.document/wire->internal document)
-      (controllers.document/create! postgresql))
+      (controllers.document/create! datalevin))
   {:status 202
    :body   {}})
 
 (s/defn retrieve-document-to-be-printed!
-  [{{:keys [postgresql]} :components}]
+  [{{:keys [datalevin]} :components}]
+
   {:status 200
-   :body   (if-let [document (controllers.document/retrieve-document-to-be-printed postgresql)]
-             {:document document}
-             {})})
+   :body   (if-let [document (controllers.document/retrieve-document-to-be-printed datalevin)]
+             {:documents [document]}
+             {:documents []})})
 
 (s/defn acknowledge!
   [{{:keys [document-id]} :path-params
-    {:keys [postgresql]}  :components}]
+    {:keys [datalevin]}   :components}]
   {:status 200
-   :body   {:document (controllers.document/acknowledge-document! (UUID/fromString document-id) postgresql)}})
+   :body   {:document (controllers.document/acknowledge-document! (UUID/fromString document-id) datalevin)}})

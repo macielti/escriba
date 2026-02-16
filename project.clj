@@ -9,35 +9,33 @@
 
   :exclusions [amazonica]
 
-  :dependencies [[org.clojure/clojure "1.12.1"]
+  :dependencies [[org.clojure/clojure "1.12.4"]
 
-                 [net.clojars.macielti/common-clj "43.74.74"]
-                 [net.clojars.macielti/postgresql-component "2.2.5"]
-                 [net.clojars.macielti/service-component "4.4.2"]
-                 [net.clojars.macielti/scheduler-component "0.2.2"]
+                 [net.clojars.macielti/common-clj "46.1.1"]
+                 [net.clojars.macielti/datalevin "4.0.0"]
+                 [net.clojars.macielti/service-component "7.4.4"]
+                 [net.clojars.macielti/scheduler-component "0.2.2" :exclusions [io.pedestal/pedestal.interceptor]]
 
                  ;pedestal
-                 [io.pedestal/pedestal.service "0.7.2"]
-                 [io.pedestal/pedestal.jetty "0.7.2"]
-                 [io.pedestal/pedestal.error "0.7.2"]
+                 [io.pedestal/pedestal.service "0.8.1"]
+                 [io.pedestal/pedestal.jetty "0.8.1"]
+                 [io.pedestal/pedestal.error "0.8.1"]
 
-                 [com.taoensso/timbre "6.7.1"]
+                 [com.taoensso/timbre "6.8.0"]
 
                  [com.github.clj-easy/graal-build-time "1.0.5"]]
 
   :profiles {:dev {:plugins        [[lein-shell "0.5.0"]
                                     [com.github.liquidz/antq "RELEASE"]
-                                    [com.github.clojure-lsp/lein-clojure-lsp "2.0.9"]]
+                                    [com.github.clojure-lsp/lein-clojure-lsp "2.0.13"]]
 
                    :resource-paths ["resources"]
 
                    :test-paths     ["test/unit" "test/integration" "test/helpers"]
 
-                   :dependencies   [[net.clojars.macielti/common-test-clj "5.2.4"]
-                                    [com.github.igrishaev/pg2-migration "0.1.40"]
+                   :dependencies   [[net.clojars.macielti/common-test-clj "7.0.1"]
                                     [http-kit.fake/http-kit.fake "0.2.2"]
-                                    [nubank/matcher-combinators "3.9.1"]
-                                    [danlentz/clj-uuid "0.2.0"]
+                                    [nubank/matcher-combinators "3.10.0"]
                                     [hashp "0.2.2"]]
 
                    :injections     [(require 'hashp.core)]

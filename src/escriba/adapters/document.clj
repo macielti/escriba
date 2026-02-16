@@ -1,12 +1,12 @@
 (ns escriba.adapters.document
-  (:require [escriba.adapters.command :as adapters.command]
+  (:require [common-clj.time.parser :as time.parser]
+            [common-clj.time.util :as time.util]
+            [escriba.adapters.command :as adapters.command]
             [escriba.models.document :as models.document]
+            [escriba.wire.datalevin.document :as wire.datalevin.document]
             [escriba.wire.in.document :as wire.in.document]
-            [escriba.wire.postgresql.document :as wire.postgresql.document]
             [medley.core :as medley]
-            [schema.core :as s])
-  (:import (java.time ZoneOffset)
-           (java.util Date)))
+            [schema.core :as s]))
 
 (s/defn wire->internal :- models.document/Document
   [{:keys [commands]} :- wire.in.document/Document]
@@ -14,18 +14,23 @@
         commands' (mapv #(adapters.command/wire->internal % document-id) commands)]
     {:id         document-id
      :status     :requested
-     :created-at (Date.)
+     :created-at (time.util/instant-now)
      :commands   commands'}))
 
-(defn local-datetime->utc-instant [ldt]
-  (Date/from (.toInstant (.atZone ldt ZoneOffset/UTC))))
+(s/defn document->datalevin :- wire.datalevin.document/Document
+  [{:keys [id status created-at failed-at retrieved-at completed-at] :as _document} :- models.document/Document]
+  (medley/assoc-some {:document/id         id
+                      :document/status     (keyword "document.status" (name status))
+                      :document/created-at (time.parser/instant->legacy-date created-at)}
+                     :document/retrieved-at (some-> retrieved-at time.parser/instant->legacy-date)
+                     :document/completed-at (some-> completed-at time.parser/instant->legacy-date)
+                     :document/failed-at (some-> failed-at time.parser/instant->legacy-date)))
 
-(s/defn postgresql->internal :- models.document/Document
-  [{:keys [id status created_at retrieved_at completed_at failed_at]} :- wire.postgresql.document/Document]
+(s/defn datalevin->document :- models.document/Document
+  [{:document/keys [id status created-at retrieved-at completed-at failed-at]} :- wire.datalevin.document/Document]
   (medley/assoc-some {:id         id
-                      :status     (keyword status)
-                      :created-at (local-datetime->utc-instant created_at)
-                      :commands   []}
-                     :retrieved-at (some-> retrieved_at local-datetime->utc-instant)
-                     :completed-at (some-> completed_at local-datetime->utc-instant)
-                     :failed-at (some-> failed_at local-datetime->utc-instant)))
+                      :status     (-> status name keyword)
+                      :created-at (time.parser/legacy-date->instant created-at)}
+                     :retrieved-at (some-> retrieved-at time.parser/legacy-date->instant)
+                     :completed-at (some-> completed-at time.parser/legacy-date->instant)
+                     :failed-at (some-> failed-at time.parser/legacy-date->instant)))
