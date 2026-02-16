@@ -32,15 +32,24 @@
           :orientation Orientation}))
 (s/defschema Align align)
 
+(def size
+  (merge base
+         {:type   (s/eq :size)
+          :width  s/Int
+          :height s/Int}))
+(s/defschema Size size)
+
 (defn- command-type [command-types]
   #(contains? (set command-types) (:type %)))
 
 (s/defschema Command
   (s/conditional
-    (command-type [:feed-paper]) FeedPaper
+   (command-type [:feed-paper]) FeedPaper
 
-    (command-type [:print-text]) PrintText
+   (command-type [:print-text]) PrintText
 
-    (command-type [:cut]) Cut
+   (command-type [:cut]) Cut
 
-    (command-type [:align]) Align))
+   (command-type [:align]) Align
+
+   (command-type [:size]) Size))

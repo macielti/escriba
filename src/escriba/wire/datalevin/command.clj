@@ -9,7 +9,9 @@
    :command/type        {:db/valueType :db.type/keyword}
    :command/orientation {:db/valueType :db.type/keyword}
    :command/text        {:db/valueType :db.type/string}
-   :command/lines       {:db/valueType :db.type/long}})
+   :command/lines       {:db/valueType :db.type/long}
+   :command/height      {:db/valueType :db.type/long}
+   :command/width       {:db/valueType :db.type/long}})
 
 (def types #{:command.type/print-text
              :command.type/feed-paper
@@ -22,11 +24,13 @@
 (def Orientation (apply s/enum orientations))
 
 (def command-schema
-  {:command/id                     s/Uuid
-   :command/index                  s/Int
-   :command/document-id            s/Uuid
-   :command/type                   Type
-   :command/orientation            Orientation
-   (s/optional-key :command/text)  s/Str
-   (s/optional-key :command/lines) s/Int})
+  {:command/id                           s/Uuid
+   :command/index                        s/Int
+   :command/document-id                  s/Uuid
+   :command/type                         Type
+   (s/optional-key :command/orientation) Orientation
+   (s/optional-key :command/text)        s/Str
+   (s/optional-key :command/lines)       s/Int
+   (s/optional-key :command/height)      s/Int
+   (s/optional-key :command/width)       s/Int})
 (s/defschema Command command-schema)
