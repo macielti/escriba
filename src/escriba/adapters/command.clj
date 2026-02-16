@@ -34,6 +34,15 @@
    :index       index
    :type        :cut})
 
+(s/defmethod wire->internal :align :- models.command/Align
+  [{:keys [index orientation]} :- wire.in.command/Align
+   document-id :- s/Uuid]
+  {:id          (random-uuid)
+   :document-id document-id
+   :index       index
+   :type        :align
+   :orientation orientation})
+
 (s/defn command->datalevin :- wire.datalevin.command/Command
   [{:keys [id index text lines type] :as _command} :- models.command/Command
    document-id :- s/Uuid]

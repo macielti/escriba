@@ -1,5 +1,6 @@
 (ns escriba.wire.in.command
-  (:require [schema.core :as s]))
+  (:require [schema.core :as s]
+            [escriba.models.command :as models.command]))
 
 (def base
   {:index s/Int})
@@ -21,16 +22,25 @@
          {:type (s/eq :cut)}))
 (s/defschema Cut cut)
 
+(def align
+  (merge base
+         {:type        (s/eq :align)
+          :orientation models.command/Orientation}))
+(s/defschema Align align)
+
 (defn- command-type [command-type]
   #(= (keyword (:type %)) command-type))
 
 (def Command
   (s/conditional
-   (command-type :feed-paper)
-   FeedPaper
+    (command-type :feed-paper)
+    FeedPaper
 
-   (command-type :print-text)
-   PrintText
+    (command-type :print-text)
+    PrintText
 
-   (command-type :cut)
-   Cut))
+    (command-type :cut)
+    Cut
+
+    (command-type :align)
+    Align))

@@ -23,11 +23,24 @@
          {:type (s/eq :cut)}))
 (s/defschema Cut cut)
 
+(def orientations #{:lt :ct :rt})
+(def Orientation (apply s/enum orientations))
+
+(def align
+  (merge base
+         {:type        (s/eq :align)
+          :orientation Orientation}))
+(s/defschema Align align)
+
 (defn- command-type [command-types]
   #(contains? (set command-types) (:type %)))
 
 (s/defschema Command
   (s/conditional
-   (command-type [:feed-paper]) FeedPaper
-   (command-type [:print-text]) PrintText
-   (command-type [:cut]) Cut))
+    (command-type [:feed-paper]) FeedPaper
+
+    (command-type [:print-text]) PrintText
+
+    (command-type [:cut]) Cut
+
+    (command-type [:align]) Align))
