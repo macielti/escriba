@@ -13,7 +13,8 @@
 (s/defn retrieve-document-to-be-printed :- (s/maybe models.document/Document)
   [database]
   (let [{document-id :id} (database.document/find-oldest-requested-document database)
-        commands (delay (database.command/find-by-document-id document-id database))]
+        commands (delay (->> (database.command/find-by-document-id document-id database)
+                             (sort-by :index)))]
     (when document-id
       (-> (database.document/set-as-pending! document-id database)
           (logic.document/document-with-commands @commands)))))
