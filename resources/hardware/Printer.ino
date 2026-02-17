@@ -1,9 +1,34 @@
 void handleSizeCommand(JsonObject command) {
-  const char* size = command["normal"];
-  if (strcmp(style, "bold") == 0) {
-    printerSerial.write(0x1B);
-    printerSerial.write(0x45);
-    printerSerial.write(1);
+  const char* size = command["size"];
+  if (strcmp(size, "normal") == 0) {
+    printerSerial.write(0x1D);
+    printerSerial.write(0x21);
+    printerSerial.write(0x00);
+  }
+  else if (strcmp(size, "double-height") == 0) {
+   printerSerial.write(0x1D);
+   printerSerial.write(0x21);
+   printerSerial.write(0x01);
+  }
+  else if (strcmp(size, "double-width") == 0) {
+   printerSerial.write(0x1D);
+   printerSerial.write(0x21);
+   printerSerial.write(0x10);
+  }
+  else if (strcmp(size, "double-high-wide") == 0) {
+   printerSerial.write(0x1D);
+   printerSerial.write(0x21);
+   printerSerial.write(0x11);
+  }
+  else if (strcmp(size, "triple-high-wide") == 0) {
+   printerSerial.write(0x1D);
+   printerSerial.write(0x22);
+   printerSerial.write(0x22);
+  }
+  else if (strcmp(size, "quadruple-high-wide") == 0) {
+   printerSerial.write(0x1D);
+   printerSerial.write(0x21);
+   printerSerial.write(0x33);
   }
 }
 
@@ -24,19 +49,14 @@ void handleStyleCommand(JsonObject command) {
     printerSerial.write(0x34);
     printerSerial.write(1);
   }
+  else if (strcmp(style, "reversed") == 0) {
+    printerSerial.write(0x1D);
+    printerSerial.write(0x42);
+    printerSerial.write(1);
+  }
   else if (strcmp(style, "normal") == 0) {
-    // disable bold
     printerSerial.write(0x1B);
-    printerSerial.write(0x45);
-    printerSerial.write(0);
-    // disable underline 
-    printerSerial.write(0x1B);
-    printerSerial.write(0x2D);
-    printerSerial.write(0);
-    // disable italic
-    printerSerial.write(0x1B);
-    printerSerial.write(0x34);
-    printerSerial.write(0);
+    printerSerial.write(0x40);
   }
 }
 
@@ -83,6 +103,9 @@ void handleCommand(JsonObject command) {
   }
   else if (strcmp(type, "align") == 0) {
     handleAlignCommand(command);
+  }
+  else if (strcmp(type, "size") == 0) {
+    handleSizeCommand(command);
   }
   else {
     Serial.print("Unknown command: ");
