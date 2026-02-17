@@ -13,9 +13,26 @@ void handleStyleCommand(JsonObject command) {
   }
 }
 
+void handleAlignCommand(JsonObject command) {
+  const char* orientation = command["orientation"];
+  if (strcmp(orientation, "lt") == 0) {
+    printerSerial.write(0x1B);
+    printerSerial.write(0x61);
+    printerSerial.write(0);
+  } 
+  else if (strcmp(orientation, "ct") == 0) {
+    printerSerial.write(0x1B);
+    printerSerial.write(0x61);
+    printerSerial.write(1);
+  }
+  else if (strcmp(orientation, "rt") == 0) {
+    printerSerial.write(0x1B);
+    printerSerial.write(0x61);
+    printerSerial.write(2);
+  }
+}
 
-
-void handleCommand(JsonObject command) { // Use JsonObject for items
+void handleCommand(JsonObject command) {
   const char* type = command["type"];
 
   if (strcmp(type, "cut") == 0) {
@@ -30,6 +47,15 @@ void handleCommand(JsonObject command) { // Use JsonObject for items
   }
   else if (strcmp(type, "style") == 0) {
     handleStyleCommand(command);
+  }
+  else if (strcmp(type, "feed-paper") == 0) {
+    printerSerial.write(0x1B);
+    printerSerial.write(0x64);
+    int lines = command["lines"] | 1;
+    printerSerial.write((uint8_t)lines);  
+  }
+  else if (strcmp(type, "align") == 0) {
+    handleAlignCommand(command);
   }
   else {
     Serial.print("Unknown command: ");

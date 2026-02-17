@@ -32,14 +32,16 @@
           :orientation Orientation}))
 (s/defschema Align align)
 
+(def sizes #{:normal :double-height :double-width :double-high-wide :triple-high-wide :quadruple-high-wide})
+(def SizeOptions (apply s/enum sizes))
+
 (def size
   (merge base
-         {:type   (s/eq :size)
-          :width  s/Int
-          :height s/Int}))
+         {:type (s/eq :size)
+          :size SizeOptions}))
 (s/defschema Size size)
 
-(def styles #{:b :i :u :u2 :bi :biu :biu2 :bu :bu2 :iu :iu2 :normal})
+(def styles #{:bold :italic :underline :normal})
 (def StyleOptions (apply s/enum styles))
 
 (def style

@@ -30,9 +30,8 @@
 
 (def size
   (merge base
-         {:type   (s/eq :size)
-          :width  s/Int
-          :height s/Int}))
+         {:type (s/eq :size)
+          :size models.command/SizeOptions}))
 (s/defschema Size size)
 
 (def style
