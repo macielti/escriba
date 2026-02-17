@@ -5,6 +5,11 @@ void handleStyleCommand(JsonObject command) {
     printerSerial.write(0x1B);
     printerSerial.write(0x45);
     printerSerial.write(1);
+  } 
+  else if (strcmp(style, "normal") == 0) {
+    printerSerial.write(0x1B);
+    printerSerial.write(0x45);
+    printerSerial.write(0);
   }
 }
 

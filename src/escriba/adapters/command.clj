@@ -59,7 +59,7 @@
   {:id          (random-uuid)
    :document-id document-id
    :index       index
-   :type        :size
+   :type        :style
    :style       style})
 
 (s/defn command->datalevin :- wire.datalevin.command/Command

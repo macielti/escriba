@@ -32,4 +32,4 @@ at https://www.gnu.org/software/classpath/license.html.
 
 curl -X POST https://api-escriba.brunolab.dev.br/api/documents \
 -H "Content-Type: application/json" \
--d '{"document": {"commands": [ { "index": 0,  "type": "print-text", "text": "Bruno do Nascimento Maciel" }, { "index": 1,  "type": "style", "style": "b" }, { "index": 2,  "type": "print-text", "text": "Bruno do Nascimento Maciel" },  { "index": 3,  "type": "cut" } ] } }' 
+-d '{"document": {"commands": [ { "index": 0,  "type": "print-text", "text": "Bruno do Nascimento Maciel" }, { "index": 1,  "type": "style", "style": "b" }, { "index": 2,  "type": "print-text", "text": "Bruno do Nascimento Maciel" }, { "index": 3,  "type": "style", "style": "normal" },  { "index": 4,  "type": "cut" } ] } }' 
