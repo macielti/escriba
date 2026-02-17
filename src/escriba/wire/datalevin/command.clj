@@ -26,6 +26,7 @@
 (def styles #{:command.style/bold
               :command.style/italic
               :command.style/underline
+              :command.style/reversed
               :command.style/normal})
 (def StyleOptions (apply s/enum styles))
 

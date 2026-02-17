@@ -56,10 +56,6 @@ void loop() {
     printerSerial.write(0x1B);
     printerSerial.write(0x40);
 
-    printerSerial.write(0x1D); // GS
-    printerSerial.write(0x21); // !
-    printerSerial.write(1);    // The size byte (combination of width and height)
-
     for (JsonObject command : commands) {
       if (command) {
         const char* type = command["type"];

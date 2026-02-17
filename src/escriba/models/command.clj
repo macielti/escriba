@@ -41,7 +41,7 @@
           :size SizeOptions}))
 (s/defschema Size size)
 
-(def styles #{:bold :italic :underline :normal})
+(def styles #{:bold :italic :underline :normal :reversed})
 (def StyleOptions (apply s/enum styles))
 
 (def style

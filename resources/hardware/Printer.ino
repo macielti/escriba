@@ -1,14 +1,41 @@
-void handleStyleCommand(JsonObject command) {
-  const char* style = command["style"];
-  // Bold
-  if (strcmp(style, "b") == 0) {
+void handleSizeCommand(JsonObject command) {
+  const char* size = command["normal"];
+  if (strcmp(style, "bold") == 0) {
     printerSerial.write(0x1B);
     printerSerial.write(0x45);
     printerSerial.write(1);
-  } 
-  else if (strcmp(style, "normal") == 0) {
+  }
+}
+
+void handleStyleCommand(JsonObject command) {
+  const char* style = command["style"];
+  if (strcmp(style, "bold") == 0) {
     printerSerial.write(0x1B);
     printerSerial.write(0x45);
+    printerSerial.write(1);
+  }
+  else if (strcmp(style, "underline") == 0) {
+    printerSerial.write(0x1B);
+    printerSerial.write(0x2D);
+    printerSerial.write(1);
+  }
+  else if (strcmp(style, "italic") == 0) {
+    printerSerial.write(0x1B);
+    printerSerial.write(0x34);
+    printerSerial.write(1);
+  }
+  else if (strcmp(style, "normal") == 0) {
+    // disable bold
+    printerSerial.write(0x1B);
+    printerSerial.write(0x45);
+    printerSerial.write(0);
+    // disable underline 
+    printerSerial.write(0x1B);
+    printerSerial.write(0x2D);
+    printerSerial.write(0);
+    // disable italic
+    printerSerial.write(0x1B);
+    printerSerial.write(0x34);
     printerSerial.write(0);
   }
 }
