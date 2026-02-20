@@ -21,5 +21,5 @@
               :route-name :document-ack]
 
              ["/api/heath"
-              :put [io.pedestal.service.interceptors/json-body
+              :get [io.pedestal.service.interceptors/json-body
                     common.service/health-check-http-request-handler]]])
