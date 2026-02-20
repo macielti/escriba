@@ -8,7 +8,7 @@
             [escriba.diplomat.job :as diplomat.job]
             [integrant.core :as ig]
             [scheduler-component.core :as component.scheduler]
-            [service-component.core :as component.service]
+            [service.component :as component.service]
             [taoensso.timbre :as timbre]
             [taoensso.timbre.tools.logging :as logging]))
 

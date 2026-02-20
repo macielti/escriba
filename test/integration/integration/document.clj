@@ -6,7 +6,7 @@
             [integration.aux.http :as aux.http]
             [matcher-combinators.test :refer [match?]]
             [schema.test :as s]
-            [service-component.core :as component.service]))
+            [service.component :as component.service]))
 
 (s/deftest create-document
   (let [system (aux.components/start-system!)

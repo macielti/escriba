@@ -13,7 +13,7 @@
 
                  [net.clojars.macielti/common-clj "46.1.1"]
                  [net.clojars.macielti/datalevin "4.0.0"]
-                 [net.clojars.macielti/service-component "7.4.4"]
+                 [net.clojars.macielti/service "0.1.0"]
                  [net.clojars.macielti/scheduler-component "0.2.2" :exclusions [io.pedestal/pedestal.interceptor]]
 
                  ;pedestal
