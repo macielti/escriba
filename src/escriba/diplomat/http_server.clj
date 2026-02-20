@@ -20,6 +20,6 @@
                     diplomat.http-server.document/acknowledge!]
               :route-name :document-ack]
 
-             ["/api/heath"
+             ["/api/health"
               :get [io.pedestal.service.interceptors/json-body
                     common.service/health-check-http-request-handler]]])
