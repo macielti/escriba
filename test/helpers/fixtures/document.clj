@@ -1,6 +1,5 @@
-(ns fixtures
-  (:require [clojure.test :refer :all]
-            [clojure.test.check.generators :as test.check.generators]
+(ns fixtures.document
+  (:require [clojure.test.check.generators :as test.check.generators]
             [common-clj.time.util :as time.util]
             [common-test-clj.helpers.schema :as helpers.schema]
             [escriba.models.command :as models.command]
@@ -18,10 +17,6 @@
   (helpers.schema/generate wire.in.command/FeedPaper {:index 0
                                                       :type  :feed-paper
                                                       :lines 42}))
-
-(s/def wire-print-text-command :- wire.in.command/PrintText
-  (helpers.schema/generate wire.in.command/PrintText {:text  text-content
-                                                      :index 0}))
 
 (s/def wire-document :- wire.in.document/Document
   {:commands [wire-command]})

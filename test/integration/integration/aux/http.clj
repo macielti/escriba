@@ -1,6 +1,5 @@
 (ns integration.aux.http
   (:require [cheshire.core :as json]
-            [clojure.test :refer :all]
             [io.pedestal.connector.test :as test]))
 
 (defn create-document!

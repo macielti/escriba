@@ -1,6 +1,5 @@
 (ns integration.aux.components
-  (:require [clojure.test :refer :all]
-            [common-clj.integrant-components.config :as component.config]
+  (:require [common-clj.integrant-components.config :as component.config]
             [common-clj.integrant-components.routes :as component.routes]
             [datalevin.component :as component.database]
             [escriba.db.datalevin.config :as database.config]

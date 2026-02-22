@@ -1,6 +1,6 @@
 (ns integration.document
-  (:require [clojure.test :refer :all]
-            [fixtures]
+  (:require [clojure.test :refer [is testing]]
+            [fixtures.document]
             [integrant.core :as ig]
             [integration.aux.components :as aux.components]
             [integration.aux.http :as aux.http]
@@ -14,7 +14,7 @@
 
     (testing "Should create a document with a valid request"
       (is (= {:status 202}
-             (aux.http/create-document! fixtures/wire-document connector))))
+             (aux.http/create-document! fixtures.document/wire-document connector))))
 
     (ig/halt! system)))
 
@@ -29,7 +29,7 @@
 
     (testing "Should create a document with a valid request"
       (is (= {:status 202}
-             (aux.http/create-document! fixtures/wire-document connector))))
+             (aux.http/create-document! fixtures.document/wire-document connector))))
 
     (testing "Should be able to trieve the document to be printed"
       (is (match? {:status 200
@@ -44,7 +44,7 @@
 (s/deftest document-acknowledge
   (let [system (aux.components/start-system!)
         connector (-> system ::component.service/service)
-        document-creation-response (aux.http/create-document! fixtures/wire-document connector)
+        document-creation-response (aux.http/create-document! fixtures.document/wire-document connector)
         fetch-document-response (aux.http/fetch-document! connector)]
 
     (testing "Should create a document with a valid request"
@@ -66,7 +66,7 @@
 (s/deftest back-to-queue
   (let [system (aux.components/start-system!)
         connector (-> system ::component.service/service)
-        document-creation-response (aux.http/create-document! fixtures/wire-document connector)
+        document-creation-response (aux.http/create-document! fixtures.document/wire-document connector)
         fetch-document-response (aux.http/fetch-document! connector)]
 
     (testing "Should create a document with a valid request"
