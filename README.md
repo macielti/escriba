@@ -6,14 +6,6 @@
 
 Scribes were highly valued members of Egyptian society. They studied for many years to learn to read and write.
 
-## Development
-
-Migration Creation:
-`lein run -m pg.migration.cli -c migration.config.edn create --slug 'customers'`
-
-Apply all Migrations:
-`lein run -m pg.migration.cli -c migration.config.edn migrate --all`
-
 ## License
 
 Copyright © 2025 Bruno do Nascimento Maciel.
