@@ -115,3 +115,80 @@
                    :command/style       keyword?
                    :command/type        :command.type/style}
                   (adapters.command/command->datalevin internal-command fixtures.document/document-id))))))
+
+(s/deftest datalevin->command-test
+  (testing "[Feed Paper] Given a datalevin command, it returns an internal representation"
+    (let [datalevin-command {:command/id          fixtures.document/command-id
+                             :command/document-id fixtures.document/document-id
+                             :command/index       0
+                             :command/lines       5
+                             :command/type        :command.type/feed-paper}]
+      (is (= {:id          fixtures.document/command-id
+              :document-id fixtures.document/document-id
+              :index       0
+              :lines       5
+              :type        :feed-paper}
+             (adapters.command/datalevin->command datalevin-command)))))
+
+  (testing "[Print Text] Given a datalevin command, it returns an internal representation"
+    (let [datalevin-command {:command/id          fixtures.document/command-id
+                             :command/document-id fixtures.document/document-id
+                             :command/index       0
+                             :command/text        "Hello World."
+                             :command/type        :command.type/print-text}]
+      (is (= {:id          fixtures.document/command-id
+              :document-id fixtures.document/document-id
+              :index       0
+              :text        "Hello World."
+              :type        :print-text}
+             (adapters.command/datalevin->command datalevin-command)))))
+
+  (testing "[Cut] Given a datalevin command, it returns an internal representation"
+    (let [datalevin-command {:command/id          fixtures.document/command-id
+                             :command/document-id fixtures.document/document-id
+                             :command/index       0
+                             :command/type        :command.type/cut}]
+      (is (= {:id          fixtures.document/command-id
+              :document-id fixtures.document/document-id
+              :index       0
+              :type        :cut}
+             (adapters.command/datalevin->command datalevin-command)))))
+
+  (testing "[Align] Given a datalevin command, it returns an internal representation"
+    (let [datalevin-command {:command/id          fixtures.document/command-id
+                             :command/document-id fixtures.document/document-id
+                             :command/index       0
+                             :command/orientation :command.orientation/ct
+                             :command/type        :command.type/align}]
+      (is (= {:id          fixtures.document/command-id
+              :document-id fixtures.document/document-id
+              :index       0
+              :orientation :ct
+              :type        :align}
+             (adapters.command/datalevin->command datalevin-command)))))
+
+  (testing "[Size] Given a datalevin command, it returns an internal representation"
+    (let [datalevin-command {:command/id          fixtures.document/command-id
+                             :command/document-id fixtures.document/document-id
+                             :command/index       0
+                             :command/size        :command.size/normal
+                             :command/type        :command.type/size}]
+      (is (= {:id          fixtures.document/command-id
+              :document-id fixtures.document/document-id
+              :index       0
+              :size        :normal
+              :type        :size}
+             (adapters.command/datalevin->command datalevin-command)))))
+
+  (testing "[Style] Given a datalevin command, it returns an internal representation"
+    (let [datalevin-command {:command/id          fixtures.document/command-id
+                             :command/document-id fixtures.document/document-id
+                             :command/index       0
+                             :command/style       :command.style/bold
+                             :command/type        :command.type/style}]
+      (is (= {:id          fixtures.document/command-id
+              :document-id fixtures.document/document-id
+              :index       0
+              :style       :bold
+              :type        :style}
+             (adapters.command/datalevin->command datalevin-command))))))

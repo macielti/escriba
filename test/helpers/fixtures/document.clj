@@ -11,6 +11,7 @@
   (:import (java.time Instant)))
 
 (def document-id (random-uuid))
+(def command-id (random-uuid))
 (def text-content "Lorem ipsum dolor sit amet.")
 
 (s/def wire-command :- wire.in.command/Command
