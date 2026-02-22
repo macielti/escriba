@@ -1,7 +1,7 @@
 (ns escriba.adapters.document-test
   (:require [clojure.test :refer [is testing]]
-            [document]
             [escriba.adapters.document :as adapters.document]
+            [fixtures.document]
             [matcher-combinators.test :refer [match?]]
             [schema.test :as s]))
 
@@ -12,4 +12,4 @@
                                :type :feed-paper}]
                  :created-at inst?
                  :status     :requested}
-                (adapters.document/wire->internal document/wire-document)))))
+                (adapters.document/wire->internal fixtures.document/wire-document)))))

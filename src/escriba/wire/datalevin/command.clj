@@ -15,7 +15,10 @@
 
 (def types #{:command.type/print-text
              :command.type/feed-paper
-             :command.type/cut})
+             :command.type/cut
+             :command.type/align
+             :command.type/size
+             :command.type/style})
 (def Type (apply s/enum types))
 
 (def orientations #{:command.orientation/lt

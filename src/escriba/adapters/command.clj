@@ -61,18 +61,61 @@
    :type        :style
    :style       style})
 
-(s/defn command->datalevin :- wire.datalevin.command/Command
-  [{:keys [id index text lines type orientation size style] :as _command} :- models.command/Command
+(defmulti command->datalevin
+  (fn [command _document-id] (:type command)))
+
+(s/defmethod command->datalevin :feed-paper :- wire.datalevin.command/Command
+  [{:keys [index id type lines]} :- models.command/FeedPaper
    document-id :- s/Uuid]
-  (medley/assoc-some {:command/id          id
-                      :command/index       index
-                      :command/type        (keyword "command.type" (name type))
-                      :command/document-id document-id}
-                     :command/text text
-                     :command/lines lines
-                     :command/orientation (some->> orientation name (keyword "command.orientation"))
-                     :command/style (some->> style name (keyword "command.style"))
-                     :command/size (some->> size name (keyword "command.size"))))
+  {:command/id          id
+   :command/index       index
+   :command/type        (keyword "command.type" (name type))
+   :command/lines       lines
+   :command/document-id document-id})
+
+(s/defmethod command->datalevin :print-text :- wire.datalevin.command/Command
+  [{:keys [index id type text]} :- models.command/PrintText
+   document-id :- s/Uuid]
+  {:command/id          id
+   :command/index       index
+   :command/type        (keyword "command.type" (name type))
+   :command/text        text
+   :command/document-id document-id})
+
+(s/defmethod command->datalevin :cut :- wire.datalevin.command/Command
+  [{:keys [index id type]} :- models.command/Cut
+   document-id :- s/Uuid]
+  {:command/id          id
+   :command/index       index
+   :command/type        (keyword "command.type" (name type))
+   :command/document-id document-id})
+
+(s/defmethod command->datalevin :align :- wire.datalevin.command/Command
+  [{:keys [index id type orientation]} :- models.command/Align
+   document-id :- s/Uuid]
+  {:command/id          id
+   :command/index       index
+   :command/type        (keyword "command.type" (name type))
+   :command/orientation (some->> orientation name (keyword "command.orientation"))
+   :command/document-id document-id})
+
+(s/defmethod command->datalevin :size :- wire.datalevin.command/Command
+  [{:keys [index id type size]} :- models.command/Size
+   document-id :- s/Uuid]
+  {:command/id          id
+   :command/index       index
+   :command/type        (keyword "command.type" (name type))
+   :command/size        (some->> size name (keyword "command.size"))
+   :command/document-id document-id})
+
+(s/defmethod command->datalevin :style :- wire.datalevin.command/Command
+  [{:keys [index id type style]} :- models.command/Style
+   document-id :- s/Uuid]
+  {:command/id          id
+   :command/index       index
+   :command/type        (keyword "command.type" (name type))
+   :command/style       (some->> style name (keyword "command.style"))
+   :command/document-id document-id})
 
 (s/defn datalevin->command :- models.command/Command
   [{:command/keys [id index text lines document-id type orientation size style]} :- wire.datalevin.command/Command]
