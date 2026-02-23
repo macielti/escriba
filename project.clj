@@ -27,13 +27,13 @@
 
   :profiles {:dev {:plugins        [[lein-shell "0.5.0"]
                                     [com.github.liquidz/antq "RELEASE"]
-                                    [com.github.clojure-lsp/lein-clojure-lsp "2.0.13"]]
+                                    [com.github.clojure-lsp/lein-clojure-lsp "2.0.14"]]
 
                    :resource-paths ["resources"]
 
                    :test-paths     ["test/unit" "test/integration" "test/helpers"]
 
-                   :dependencies   [[net.clojars.macielti/common-test-clj "7.0.1"]
+                   :dependencies   [[net.clojars.macielti/common-test-clj "7.0.2"]
                                     [http-kit.fake/http-kit.fake "0.2.2"]
                                     [nubank/matcher-combinators "3.10.0"]
                                     [hashp "0.2.2"]]
