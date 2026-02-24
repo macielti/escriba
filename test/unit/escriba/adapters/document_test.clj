@@ -4,7 +4,9 @@
             [escriba.adapters.document :as adapters.document]
             [escriba.models.command :as models.command]
             [escriba.models.document :as models.document]
+            [escriba.wire.datalevin.document :as wire.datalevin.document]
             [fixtures.document]
+            [java-time.api :as jt]
             [matcher-combinators.test :refer [match?]]
             [schema.test :as s]))
 
@@ -25,3 +27,11 @@
                    :document/status     keyword?
                    :document/created-at inst?}
                   (adapters.document/document->datalevin internal-document))))))
+
+(s/deftest datalevin->document-test
+  (testing "Given a datalevin document we should be able to conver it to internal representation"
+    (let [datalevin-document (helpers.schema/generate wire.datalevin.document/Document {})]
+      (is (match? {:id         uuid?
+                   :status     keyword?
+                   :created-at jt/instant?}
+                  (adapters.document/datalevin->document datalevin-document))))))
