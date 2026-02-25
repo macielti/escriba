@@ -42,3 +42,43 @@
                    :id         fixtures.document/document-id
                    :status     keyword?}
                   (database.document/lookup-document-with-commands fixtures.document/document-id (d/db database-connection)))))))
+
+(s/deftest find-oldest-requested-document-test
+  (testing "We should be able query the oldest requested document entity, without commands"
+    (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)
+          internal-commands [(helpers.schema/generate models.command/Command {:type :cut})]
+          internal-document (helpers.schema/generate models.document/Document {:id         fixtures.document/document-id
+                                                                               :commands   internal-commands
+                                                                               :status     :requested
+                                                                               :created-at (jt/instant 0)})
+          internal-document-ii (helpers.schema/generate models.document/Document {:id         (random-uuid)
+                                                                                  :commands   internal-commands
+                                                                                  :status     :requested
+                                                                                  :created-at (jt/instant 10)})
+          internal-document-iii (helpers.schema/generate models.document/Document {:id         (random-uuid)
+                                                                                   :commands   internal-commands
+                                                                                   :status     :requested
+                                                                                   :created-at (jt/instant 20)})
+          _ (database.document/insert-document-with-commands! internal-document database-connection)
+          _ (database.document/insert-document-with-commands! internal-document-ii database-connection)
+          _ (database.document/insert-document-with-commands! internal-document-iii database-connection)]
+
+      (is (match? {:created-at jt/instant?
+                   :id         fixtures.document/document-id
+                   :status     :requested}
+                  (database.document/find-oldest-requested-document database-connection))))))
+
+(s/deftest set-as-pending!-test
+  (testing "We should be able to mark a document as pending"
+    (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)
+          internal-commands [(helpers.schema/generate models.command/Command {:type :cut})]
+          internal-document (helpers.schema/generate models.document/Document {:id         fixtures.document/document-id
+                                                                               :commands   internal-commands
+                                                                               :status     :requested
+                                                                               :created-at (jt/instant 0)})
+          _ (database.document/insert-document-with-commands! (dissoc internal-document :retrieved-at) database-connection)]
+
+      (is (match? {:id           fixtures.document/document-id
+                   :status       :pending
+                   :retrieved-at jt/instant?}
+                  (database.document/set-as-pending! fixtures.document/document-id database-connection))))))
