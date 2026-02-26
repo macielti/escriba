@@ -43,7 +43,7 @@
 
 (def command-schema
   {:command/id                           s/Uuid
-   :command/index                        s/Int
+   :command/index                        common.schema/NonNegativeInt
    :command/document-id                  s/Uuid
    :command/type                         Type
    (s/optional-key :command/orientation) Orientation

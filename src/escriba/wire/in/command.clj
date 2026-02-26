@@ -1,9 +1,10 @@
 (ns escriba.wire.in.command
-  (:require [escriba.models.command :as models.command]
+  (:require [common-clj.schema.extensions :as schema.extensions]
+            [escriba.models.command :as models.command]
             [schema.core :as s]))
 
 (def base
-  {:index s/Int})
+  {:index schema.extensions/NonNegativeInt})
 
 (def feed-paper
   (merge base

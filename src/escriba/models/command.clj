@@ -1,9 +1,10 @@
 (ns escriba.models.command
-  (:require [schema.core :as s]))
+  (:require [common-clj.schema.extensions :as schema.extensions]
+            [schema.core :as s]))
 
 (def base
   {:id          s/Uuid
-   :index       s/Int
+   :index       schema.extensions/NonNegativeInt
    :document-id s/Uuid})
 
 (def feed-paper
