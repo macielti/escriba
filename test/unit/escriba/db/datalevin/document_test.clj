@@ -1,5 +1,5 @@
 (ns escriba.db.datalevin.document-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [is testing]]
             [common-test-clj.helpers.schema :as helpers.schema]
             [datalevin.core :as d]
             [datalevin.mock :as database.mock]

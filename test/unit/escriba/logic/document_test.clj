@@ -1,5 +1,5 @@
 (ns escriba.logic.document-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [is testing]]
             [common-test-clj.helpers.schema :as helpers.schema]
             [escriba.logic.document :as logic.document]
             [escriba.models.command :as models.command]
