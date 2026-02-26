@@ -137,7 +137,7 @@
       (is (match? [{:id           (:id old-pending-doc)
                     :status       :pending
                     :retrieved-at jt/instant?}]
-                  (database.document/pending-for-too-long! database-connection)))))
+                  (database.document/pending-for-too-long database-connection)))))
 
   (testing "Should return empty when no documents are pending for too long"
     (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)
@@ -149,9 +149,9 @@
                                                                                 :retrieved-at (jt/minus (jt/instant) (jt/seconds 45))})
           _ (database.document/insert-document-with-commands! recent-pending-doc database-connection)]
 
-      (is (empty? (database.document/pending-for-too-long! database-connection)))))
+      (is (empty? (database.document/pending-for-too-long database-connection)))))
 
   (testing "Should return empty when no pending documents exist"
     (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)]
 
-      (is (empty? (database.document/pending-for-too-long! database-connection))))))
+      (is (empty? (database.document/pending-for-too-long database-connection))))))

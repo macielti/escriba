@@ -8,6 +8,12 @@
             [java-time.api :as jt]
             [schema.core :as s]))
 
+(defn- validate-status-transition
+  "Creates a CAS (Compare-And-Swap) transition vector for atomic document status updates.
+   Validates that the document is in the expected current status before transitioning to the new status."
+  [document-id current-status new-status]
+  [:db/cas [:document/id document-id] :document/status current-status new-status])
+
 (s/defn lookup-document-with-commands :- models.document/Document
   [document-id :- s/Uuid
    db-after]
@@ -46,8 +52,8 @@
 (s/defn set-as-pending! :- models.document/Document
   [document-id :- s/Uuid
    database]
-  (let [{:keys [db-after]} (d/transact! database [{:document/id           document-id
-                                                   :document/status       :document.status/pending
+  (let [{:keys [db-after]} (d/transact! database [(validate-status-transition document-id :document.status/requested :document.status/pending)
+                                                  {:document/id           document-id
                                                    :document/retrieved-at (-> (jt/instant) time.parser/instant->legacy-date)}])]
     (-> (d/q '[:find (pull ?document [*])
                :in $ ?document-id
@@ -59,8 +65,8 @@
 (s/defn set-as-completed! :- models.document/Document
   [document-id :- s/Uuid
    database]
-  (let [{:keys [db-after]} (d/transact! database [{:document/id           document-id
-                                                   :document/status       :document.status/completed
+  (let [{:keys [db-after]} (d/transact! database [(validate-status-transition document-id :document.status/pending :document.status/completed)
+                                                  {:document/id           document-id
                                                    :document/completed-at (-> (jt/instant) time.parser/instant->legacy-date)}])]
     (-> (d/q '[:find (pull ?document [*])
                :in $ ?document-id
@@ -69,7 +75,7 @@
         (dissoc :db/id)
         adapters.document/datalevin->document)))
 
-(s/defn pending-for-too-long! :- [models.document/Document]
+(s/defn pending-for-too-long :- [models.document/Document]
   [database]
   (let [documents (some->> (d/q '[:find (pull ?document [*])
                                   :in $
@@ -82,8 +88,8 @@
 (s/defn back-to-queue! :- models.document/Document
   [document-id :- s/Uuid
    database]
-  (let [{:keys [db-after]} (d/transact! database [{:document/id     document-id
-                                                   :document/status :document.status/requested}])]
+  (let [{:keys [db-after]} (d/transact! database [(validate-status-transition document-id :document.status/pending :document.status/requested)
+                                                  {:document/id document-id}])]
     (-> (d/q '[:find (pull ?document [*])
                :in $ ?document-id
                :where [?document :document/id ?document-id]] db-after document-id)

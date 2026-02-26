@@ -26,6 +26,6 @@
 
 (s/defn back-to-queue!
   [datalevin]
-  (let [documents (database.document/pending-for-too-long! datalevin)]
+  (let [documents (database.document/pending-for-too-long datalevin)]
     (doseq [{:keys [id]} documents]
       (database.document/back-to-queue! id datalevin))))
