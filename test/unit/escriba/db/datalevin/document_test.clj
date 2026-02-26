@@ -82,3 +82,18 @@
                    :status       :pending
                    :retrieved-at jt/instant?}
                   (database.document/set-as-pending! fixtures.document/document-id database-connection))))))
+
+(s/deftest back-to-queue!-test
+  (testing "We should be able to move a document back to requested status"
+    (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)
+          internal-commands [(helpers.schema/generate models.command/Command {:type :cut})]
+          internal-document (helpers.schema/generate models.document/Document {:id         fixtures.document/document-id
+                                                                               :commands   internal-commands
+                                                                               :status     :requested
+                                                                               :created-at (jt/instant 0)})
+          _ (database.document/insert-document-with-commands! internal-document database-connection)
+          _ (database.document/set-as-pending! fixtures.document/document-id database-connection)]
+
+      (is (match? {:id     fixtures.document/document-id
+                   :status :requested}
+                  (database.document/back-to-queue! fixtures.document/document-id database-connection))))))
