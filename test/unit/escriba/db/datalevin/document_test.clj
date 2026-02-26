@@ -96,3 +96,47 @@
       (is (match? {:id     fixtures.document/document-id
                    :status :requested}
                   (database.document/back-to-queue! fixtures.document/document-id database-connection))))))
+
+(s/deftest pending-for-too-long!-test
+  (testing "Should return documents that have been pending for 60+ seconds"
+    (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)
+          internal-commands [(helpers.schema/generate models.command/Command {:type :cut})]
+          ;; Document pending for > 60 seconds (should be returned)
+          old-pending-doc (helpers.schema/generate models.document/Document {:id           (random-uuid)
+                                                                             :commands     internal-commands
+                                                                             :status       :pending
+                                                                             :retrieved-at (jt/minus (jt/instant) (jt/seconds 70))})
+          ;; Document pending for < 60 seconds (should NOT be returned)
+          recent-pending-doc (helpers.schema/generate models.document/Document {:id           (random-uuid)
+                                                                                :commands     internal-commands
+                                                                                :status       :pending
+                                                                                :retrieved-at (jt/minus (jt/instant) (jt/seconds 30))})
+          ;; Document with different status (should NOT be returned)
+          requested-doc (helpers.schema/generate models.document/Document {:id       (random-uuid)
+                                                                           :commands internal-commands
+                                                                           :status   :requested})
+          _ (database.document/insert-document-with-commands! old-pending-doc database-connection)
+          _ (database.document/insert-document-with-commands! recent-pending-doc database-connection)
+          _ (database.document/insert-document-with-commands! requested-doc database-connection)]
+
+      (is (match? [{:id           (:id old-pending-doc)
+                    :status       :pending
+                    :retrieved-at jt/instant?}]
+                  (database.document/pending-for-too-long! database-connection)))))
+
+  (testing "Should return empty when no documents are pending for too long"
+    (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)
+          internal-commands [(helpers.schema/generate models.command/Command {:type :cut})]
+          ;; Document pending for < 60 seconds
+          recent-pending-doc (helpers.schema/generate models.document/Document {:id           (random-uuid)
+                                                                                :commands     internal-commands
+                                                                                :status       :pending
+                                                                                :retrieved-at (jt/minus (jt/instant) (jt/seconds 30))})
+          _ (database.document/insert-document-with-commands! recent-pending-doc database-connection)]
+
+      (is (empty? (database.document/pending-for-too-long! database-connection)))))
+
+  (testing "Should return empty when no pending documents exist"
+    (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)]
+
+      (is (nil? (database.document/pending-for-too-long! database-connection))))))
