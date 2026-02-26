@@ -139,4 +139,4 @@
   (testing "Should return empty when no pending documents exist"
     (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)]
 
-      (is (nil? (database.document/pending-for-too-long! database-connection))))))
+      (is (empty? (database.document/pending-for-too-long! database-connection))))))
