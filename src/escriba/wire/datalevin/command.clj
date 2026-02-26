@@ -1,5 +1,6 @@
 (ns escriba.wire.datalevin.command
-  (:require [schema.core :as s]))
+  (:require [common-clj.schema.extensions :as schema.extensions]
+            [schema.core :as s]))
 
 (def command-skeleton
   {:command/id          {:db/valueType :db.type/uuid
@@ -43,7 +44,7 @@
 
 (def command-schema
   {:command/id                           s/Uuid
-   :command/index                        common.schema/NonNegativeInt
+   :command/index                        schema.extensions/NonNegativeInt
    :command/document-id                  s/Uuid
    :command/type                         Type
    (s/optional-key :command/orientation) Orientation
