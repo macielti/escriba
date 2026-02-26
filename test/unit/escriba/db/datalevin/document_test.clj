@@ -87,10 +87,9 @@
   (testing "We should be able to move a document back to requested status"
     (let [database-connection (database.mock/database-connection-for-unit-tests! database.config/schema)
           internal-commands [(helpers.schema/generate models.command/Command {:type :cut})]
-          internal-document (helpers.schema/generate models.document/Document {:id         fixtures.document/document-id
-                                                                               :commands   internal-commands
-                                                                               :status     :requested
-                                                                               :created-at (jt/instant 0)})
+          internal-document (helpers.schema/generate models.document/Document {:id       fixtures.document/document-id
+                                                                               :commands internal-commands
+                                                                               :status   :requested})
           _ (database.document/insert-document-with-commands! internal-document database-connection)
           _ (database.document/set-as-pending! fixtures.document/document-id database-connection)]
 
