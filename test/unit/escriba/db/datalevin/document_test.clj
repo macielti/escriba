@@ -105,7 +105,7 @@
           old-pending-doc (helpers.schema/generate models.document/Document {:id           (random-uuid)
                                                                              :commands     internal-commands
                                                                              :status       :pending
-                                                                             :retrieved-at (jt/minus (jt/instant) (jt/seconds 70))})
+                                                                             :retrieved-at (jt/minus (jt/instant) (jt/seconds 120))})
           ;; Document pending for < 60 seconds (should NOT be returned)
           recent-pending-doc (helpers.schema/generate models.document/Document {:id           (random-uuid)
                                                                                 :commands     internal-commands
@@ -131,7 +131,7 @@
           recent-pending-doc (helpers.schema/generate models.document/Document {:id           (random-uuid)
                                                                                 :commands     internal-commands
                                                                                 :status       :pending
-                                                                                :retrieved-at (jt/minus (jt/instant) (jt/seconds 30))})
+                                                                                :retrieved-at (jt/minus (jt/instant) (jt/seconds 45))})
           _ (database.document/insert-document-with-commands! recent-pending-doc database-connection)]
 
       (is (empty? (database.document/pending-for-too-long! database-connection)))))
