@@ -33,4 +33,7 @@
   (timbre/set-min-level! :info)
   (ig/init arrangement))
 
-(def -main start-system!)
+(defn -main [& _args]
+  (let [system (start-system!)]
+    (.addShutdownHook (Runtime/getRuntime)
+                      (Thread. #(ig/halt! system)))))
